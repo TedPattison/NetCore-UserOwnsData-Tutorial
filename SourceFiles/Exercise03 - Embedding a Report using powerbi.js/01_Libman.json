@@ -1,0 +1,15 @@
+{
+    "version": "1.0",
+    "defaultProvider": "cdnjs",
+    "libraries": [
+      {
+        "library": "powerbi-client@2.13.3",
+        "destination": "wwwroot/lib/powerbi-client/",
+        "files": [
+          "powerbi.min.js",
+          "powerbi.js",
+          "powerbi.js.map"
+        ]
+      }
+    ]
+  }
