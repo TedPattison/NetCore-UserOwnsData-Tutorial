@@ -40,8 +40,6 @@ Add-AzureADApplicationOwner -ObjectId $aadApplication.ObjectId -RefObjectId $use
 
 $outputFile = "$PSScriptRoot\UserOwnsDataSampleApp.txt"
 Write-Host "Writing info to $outputFile"
-Out-File -FilePath $outputFile -InputObject "--- Copy this config data into AppSettings.json for $appDisplayName ---"
-Out-File -FilePath $outputFile -Append -InputObject ""
 Out-File -FilePath $outputFile -Append -InputObject "{"
 Out-File -FilePath $outputFile -Append -InputObject "  ""AzureAd"": {"
 Out-File -FilePath $outputFile -Append -InputObject "    ""Instance"": ""https://login.microsoftonline.com/"","
