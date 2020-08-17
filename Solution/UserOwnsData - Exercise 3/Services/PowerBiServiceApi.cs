@@ -44,12 +44,9 @@ namespace UserOwnsData.Services {
 		}
 
 		public async Task<EmbeddedReportViewModel> GetReport(Guid WorkspaceId, Guid ReportId) {
-			
 			PowerBIClient pbiClient = GetPowerBiClient();
-			
 			// call to Power BI Service API to get embedding data
 			var report = await pbiClient.Reports.GetReportInGroupAsync(WorkspaceId, ReportId);
-			
 			// return report embedding data to caller
 			return new EmbeddedReportViewModel {
 				Id = report.Id.ToString(),

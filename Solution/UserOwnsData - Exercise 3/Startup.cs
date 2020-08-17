@@ -13,44 +13,44 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
 using Microsoft.Identity.Web.TokenCacheProviders;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
+using Microsoft.Identity.Web.UI;
 
 using UserOwnsData.Services;
 
 namespace UserOwnsData {
 
   public class Startup {
-  
+
     public Startup(IConfiguration configuration) {
       Configuration = configuration;
     }
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services) {
+public void ConfigureServices(IServiceCollection services) {
+
+  services
+    .AddMicrosoftWebAppAuthentication(Configuration)
+    .AddMicrosoftWebAppCallsWebApi(Configuration, PowerBiServiceApi.RequiredScopes)
+    .AddInMemoryTokenCaches();
+
+  services.AddScoped(typeof(PowerBiServiceApi));
 
 
-      services
-        .AddMicrosoftWebAppAuthentication(Configuration)
-        .AddMicrosoftWebAppCallsWebApi(Configuration, PowerBiServiceApi.RequiredScopes)
-        .AddInMemoryTokenCaches();
+  var mvcBuilder = services.AddControllersWithViews(options => {
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+  });
 
-      services.AddScoped(typeof(PowerBiServiceApi));
+  mvcBuilder.AddMicrosoftIdentityUI();
 
-      var mvcBuilder = services.AddControllersWithViews(options => {
-        var policy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-        options.Filters.Add(new AuthorizeFilter(policy));
-      });
+  services.AddRazorPages();
 
-      mvcBuilder.AddMicrosoftIdentityUI();
-
-      services.AddRazorPages();
-    }
+}
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

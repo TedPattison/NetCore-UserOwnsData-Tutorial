@@ -13,32 +13,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
 using Microsoft.Identity.Web.TokenCacheProviders;
 using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
-
-using UserOwnsData.Services;
+using Microsoft.Identity.Web.UI;
 
 namespace UserOwnsData {
 
   public class Startup {
-  
+
     public Startup(IConfiguration configuration) {
       Configuration = configuration;
     }
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
 
-
-      services
-        .AddMicrosoftWebAppAuthentication(Configuration)
-        .AddMicrosoftWebAppCallsWebApi(Configuration, PowerBiServiceApi.RequiredScopes)
-        .AddInMemoryTokenCaches();
-
-      services.AddScoped(typeof(PowerBiServiceApi));
+      services.AddMicrosoftWebAppAuthentication(Configuration);
 
       var mvcBuilder = services.AddControllersWithViews(options => {
         var policy = new AuthorizationPolicyBuilder()
