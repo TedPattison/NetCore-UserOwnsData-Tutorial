@@ -7,7 +7,7 @@ $userAccountId = $authResult.Account.Id
 $user = Get-AzureADUser -ObjectId $userAccountId
 
 $appDisplayName = "User-Owns-Data Sample App"
-$replyUrl = "https://localhost:44300/signin-oidc"
+$replyUrl = "https://localhost:5001/signin-oidc"
 
 # create app secret
 $newGuid = New-Guid
