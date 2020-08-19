@@ -29,28 +29,26 @@ namespace UserOwnsData {
 
     public IConfiguration Configuration { get; }
 
-public void ConfigureServices(IServiceCollection services) {
+    public void ConfigureServices(IServiceCollection services) {
 
-  services
-    .AddMicrosoftWebAppAuthentication(Configuration)
-    .AddMicrosoftWebAppCallsWebApi(Configuration, PowerBiServiceApi.RequiredScopes)
-    .AddInMemoryTokenCaches();
+      services
+        .AddMicrosoftWebAppAuthentication(Configuration)
+        .AddMicrosoftWebAppCallsWebApi(Configuration, PowerBiServiceApi.RequiredScopes)
+        .AddInMemoryTokenCaches();
 
-  services.AddScoped(typeof(PowerBiServiceApi));
+      services.AddScoped(typeof(PowerBiServiceApi));
 
+      var mvcBuilder = services.AddControllersWithViews(options => {
+        var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+        options.Filters.Add(new AuthorizeFilter(policy));
+      });
 
-  var mvcBuilder = services.AddControllersWithViews(options => {
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-  });
+      mvcBuilder.AddMicrosoftIdentityUI();
 
-  mvcBuilder.AddMicrosoftIdentityUI();
-
-  services.AddRazorPages();
-
-}
+      services.AddRazorPages();
+    }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
